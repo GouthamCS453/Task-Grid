@@ -14,18 +14,18 @@ function Login({ setUser }) {
     e.preventDefault();
     console.log('Login attempt:', { name, role, password });
     try {
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const res = await axios.post('http://localhost:5000/api/login', {
         name,
         role,
         password,
       });
-      console.log('Login success:', response.data);
-      setUser({ name: response.data.name, role: response.data.role });
+      console.log('Login success:', res.data);
+      setUser({ name: res.data.name, role: res.data.role });
       setError('');
       navigate('/dashboard');
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError(err.res?.data?.message || 'Login failed. Please try again.');
     }
   };
 

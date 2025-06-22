@@ -70,7 +70,7 @@ function AdminDashboard({ user, setUser }) {
     <div className="admin-dashboard-container">
       <nav className="navbar navbar-expand-sm navbar-blue fixed-top">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/dashboard">Task Manager</Link>
+          <Link className="navbar-brand" to="/dashboard">Task Grid</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>

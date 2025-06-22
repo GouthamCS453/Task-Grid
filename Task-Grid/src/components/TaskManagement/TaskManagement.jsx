@@ -28,7 +28,7 @@ function TaskManagement({ user, setUser }) {
     }
   }, [user, navigate]);
 
-  // Fetch projects, team members, and tasks
+  // FETCH EVERYTHING
   const fetchTasks = () => {
     const query = user.role === 'Team Member' ? { assignedTo: user.name } : {};
     axios.get('http://localhost:5000/api/tasks', { params: query })
@@ -82,7 +82,7 @@ function TaskManagement({ user, setUser }) {
     fetchTasks();
   }, [user]);
 
-  // form submission for creating or updating tasks
+  // SUBMISSION
   const handleSubmit = (e) => {
     e.preventDefault();
     const taskData = { ...form };
@@ -101,7 +101,7 @@ function TaskManagement({ user, setUser }) {
         .then((response) => {
           console.log('Update task response:', { status: response.status, data: response.data });
           if (response.status === 200 && response.data) {
-            fetchTasks(); // Refetch to ensure populated fields
+            fetchTasks(); 
             resetForm();
             setSuccess('Task updated successfully!');
           } else {
@@ -142,7 +142,7 @@ function TaskManagement({ user, setUser }) {
     }
   };
 
-  // Delete a task
+
   const handleDelete = (id) => {
     setError('');
     setSuccess('');
@@ -163,7 +163,7 @@ function TaskManagement({ user, setUser }) {
       });
   };
 
-  // Load task data for editing
+  
   const handleEdit = (task) => {
     setForm({
       title: task.title || '',
@@ -179,7 +179,7 @@ function TaskManagement({ user, setUser }) {
     setSuccess('');
   };
 
-  // Reset form
+ 
   const resetForm = () => {
     setForm({
       title: '',
@@ -208,7 +208,7 @@ function TaskManagement({ user, setUser }) {
     <div className="task-management-container">
       <nav className="navbar navbar-expand-sm navbar-blue fixed-top">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/dashboard">Task Manager</Link>
+          <Link className="navbar-brand" to="/dashboard">Task Grid</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>

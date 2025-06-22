@@ -1,12 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const Project = require('./models/Project');
 const Task = require('./models/Task');
 const TeamMember = require('./models/TeamMember');
 
-dotenv.config();
 const app = express();
 
 // Middleware
