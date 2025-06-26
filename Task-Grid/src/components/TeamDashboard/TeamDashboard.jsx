@@ -20,8 +20,7 @@ function TeamDashboard({ user, setUser }) {
         setError('');
       })
       .catch((error) => {
-        console.error('Error fetching tasks:', error);
-        setError('Failed to load tasks. Please try again later.');
+        setError('Failed to load tasks.');
       });
   }, [user.name]);
 
@@ -31,10 +30,10 @@ function TeamDashboard({ user, setUser }) {
   };
 
   return (
-    <div className="team-dashboard-container">
-      <nav className="navbar navbar-expand-sm navbar-blue fixed-top">
+    <div className="min-vh-100 bg-light">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/dashboard">Task Grid</Link>
+          <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -44,46 +43,63 @@ function TeamDashboard({ user, setUser }) {
                 <Link className="nav-link" to="/tasks">Manage Tasks</Link>
               </li>
             </ul>
-            <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>Logout</button>
+            <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
+              <i className="bi bi-box-arrow-right me-1"></i>Logout
+            </button>
           </div>
         </div>
       </nav>
-      <div className="team-dashboard-content">
-        <h2>Welcome, {user.name} (Team Member)</h2>
-        {error && <div className="alert alert-danger">{error}</div>}
-        <div className="card mb-3">
-          <div className="card-body">
-            <h5 className="card-title">Your Task Summary</h5>
-            <p>Total Tasks: {taskSummary.total}</p>
-            <p>Completed: {taskSummary.completed}</p>
+      <main className="pt-5 mt-5">
+        <div className="container-fluid py-4">
+          <h2 className="mb-4">Welcome, {user?.name} (Team Member)</h2>
+          {error && <div className="alert alert-danger">{error}</div>}
+          <div className="card mb-4 shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title">Your Task Summary</h5>
+              <div className="row">
+                <div className="col-md-6 mb-2">Total Tasks: {taskSummary.total}</div>
+                <div className="col-md-6 mb-2">Completed: {taskSummary.completed}</div>
+              </div>
+            </div>
           </div>
+          <h3 className="mb-3">Your Tasks</h3>
+          {tasks.length === 0 && !error && (
+            <div className="alert alert-info">No tasks assigned to you.</div>
+          )}
+          {tasks.length > 0 && (
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <div className="table-responsive">
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Project</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Due Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tasks.map((task) => (
+                        <tr key={task._id}>
+                          <td>{task.title}</td>
+                          <td>{task.project?.title || 'N/A'}</td>
+                          <td>
+                            <span className={`badge bg-${task.status === 'Done' ? 'success' : task.status === 'In Progress' ? 'warning' : 'secondary'}`}>
+                              {task.status}
+                            </span>
+                          </td>
+                          <td>{new Date(task.dueDate).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-        <h3>Your Tasks</h3>
-        {tasks.length === 0 && !error ? (
-          <p>No tasks assigned to you.</p>
-        ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Project</th>
-                <th>Status</th>
-                <th>Due Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks.map((task) => (
-                <tr key={task._id}>
-                  <td>{task.title}</td>
-                  <td>{task.project?.title || 'N/A'}</td>
-                  <td>{task.status}</td>
-                  <td>{new Date(task.dueDate).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './ProjectManagement.css';
+import './TeamManagement.css';
 
-function ProjectManagement({ user, setUser }) {
-  const [projects, setProjects] = useState([]);
+function TeamManagement({ user, setUser }) {
+  const [teamMembers, setTeamMembers] = useState([]);
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    startDate: '',
-    endDate: '',
+    name: '',
+    email: '',
+    role: 'Team Member',
+    password: '',
   });
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState('');
@@ -19,53 +19,54 @@ function ProjectManagement({ user, setUser }) {
   useEffect(() => {
     if (!user || user.role !== 'Admin') {
       navigate('/login');
+      return;
     }
-  }, [user, navigate]);
-
-  const fetchProjects = () => {
-    axios.get('http://localhost:5000/api/projects')
+    axios.get('http://localhost:5000/api/teammembers')
       .then((response) => {
-        const validProjects = response.data.filter(
-          (project) => project && project._id && project.title
+        const validMembers = response.data.filter(
+          (member) => member && member._id && member.name
         );
-        setProjects(validProjects);
+        setTeamMembers(validMembers);
         setError('');
       })
       .catch((error) => {
-        setError('Failed to load projects.');
+        setError(`Failed to load team members: ${error.response?.data?.message || error.message}`);
       });
-  };
-
-  useEffect(() => {
-    if (user && user.role === 'Admin') {
-      fetchProjects();
-    }
-  }, [user]);
+  }, [user, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
+    const memberData = {
+      name: form.name,
+      email: form.email,
+      role: form.role,
+    };
+    if (form.password) {
+      memberData.password = form.password;
+    }
+
     if (editingId) {
-      axios.put(`http://localhost:5000/api/projects/${editingId}`, form)
-        .then(() => {
-          fetchProjects();
+      axios.put(`http://localhost:5000/api/teammembers/${editingId}`, memberData)
+        .then((response) => {
+          setTeamMembers(teamMembers.map((member) => (member._id === editingId ? response.data : member)));
           resetForm();
-          setSuccess('Project updated successfully!');
+          setSuccess('Team member updated successfully!');
         })
         .catch((error) => {
-          setError(`Failed to update project: ${error.response?.data?.message || error.message}`);
+          setError(`Failed to update team member: ${error.response?.data?.message || error.message}`);
         });
     } else {
-      axios.post('http://localhost:5000/api/projects', form)
-        .then(() => {
-          fetchProjects();
+      axios.post('http://localhost:5000/api/teammembers', memberData)
+        .then((response) => {
+          setTeamMembers([...teamMembers, response.data]);
           resetForm();
-          setSuccess('Project created successfully!');
+          setSuccess('Team member created successfully!');
         })
         .catch((error) => {
-          setError(`Failed to create project: ${error.response?.data?.message || error.message}`);
+          setError(`Failed to create team member: ${error.response?.data?.message || error.message}`);
         });
     }
   };
@@ -73,34 +74,34 @@ function ProjectManagement({ user, setUser }) {
   const handleDelete = (id) => {
     setError('');
     setSuccess('');
-    axios.delete(`http://localhost:5000/api/projects/${id}`)
+    axios.delete(`http://localhost:5000/api/teammembers/${id}`)
       .then(() => {
-        setProjects(projects.filter((p) => p._id !== id));
-        setSuccess('Project deleted successfully!');
+        setTeamMembers(teamMembers.filter((member) => member._id !== id));
+        setSuccess('Team member deleted successfully!');
       })
       .catch((error) => {
-        setError(`Failed to delete project: ${error.response?.data?.message || error.message}`);
+        setError(`Failed to delete team member: ${error.response?.data?.message || error.message}`);
       });
   };
 
-  const handleEdit = (project) => {
+  const handleEdit = (member) => {
     setForm({
-      title: project.title || '',
-      description: project.description || '',
-      startDate: project.startDate ? project.startDate.split('T')[0] : '',
-      endDate: project.endDate ? project.endDate.split('T')[0] : '',
+      name: member.name || '',
+      email: member.email || '',
+      role: member.role || 'Team Member',
+      password: '',
     });
-    setEditingId(project._id);
-    setError('');
+    setEditingId(member._id);
     setSuccess('');
+    setError('');
   };
 
   const resetForm = () => {
     setForm({
-      title: '',
-      description: '',
-      startDate: '',
-      endDate: '',
+      name: '',
+      email: '',
+      role: 'Team Member',
+      password: '',
     });
     setEditingId(null);
     setError('');
@@ -108,8 +109,8 @@ function ProjectManagement({ user, setUser }) {
   };
 
   const handleLogout = () => {
-    setUser(null);
     navigate('/login');
+    setUser(null);
   };
 
   if (!user || user.role !== 'Admin') return null;
@@ -128,10 +129,10 @@ function ProjectManagement({ user, setUser }) {
                 <Link className="nav-link" to="/dashboard">Dashboard</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/tasks">Manage Tasks</Link>
+                <Link className="nav-link" to="/projects">Manage Projects</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active" to="/projects">Manage Projects</Link>
+                <Link className="nav-link active" to="/team">Manage Team</Link>
               </li>
             </ul>
             <button className="btn btn-outline-light" onClick={handleLogout}>
@@ -142,56 +143,57 @@ function ProjectManagement({ user, setUser }) {
       </nav>
       <main className="pt-5 mt-5">
         <div className="container-fluid py-4">
-          <h2 className="mb-4">Manage Projects</h2>
+          <h2 className="mb-3">Manage Team Members</h2>
           {error && <div className="alert alert-danger">{error}</div>}
           {success && <div className="alert alert-success">{success}</div>}
           <div className="card mb-4 shadow-sm">
             <div className="card-body">
-              <h5 className="card-title">{editingId ? 'Edit Project' : 'Add Project'}</h5>
+              <h5 className="card-title">{editingId ? 'Edit Team Member' : 'Add Team Member'}</h5>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label className="form-label">Title</label>
+                  <label className="form-label">Name</label>
                   <input
                     type="text"
                     className="form-control"
-                    value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
                     required
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Description</label>
+                  <label className="form-label">Email</label>
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
-                    value={form.description}
-                    onChange={(e) => setForm({ ...form, description: e.target.value })}
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    required
                   />
                 </div>
-                <div className="row">
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">Start Date</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      value={form.startDate}
-                      onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">End Date</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      value={form.endDate}
-                      onChange={(e) => setForm({ ...form, endDate: e.target.value })}
-                      required
-                    />
-                  </div>
+                <div className="mb-3">
+                  <label className="form-label">Role</label>
+                  <select
+                    className="form-select"
+                    value={form.role}
+                    onChange={(e) => setForm({ ...form, role: e.target.value })}
+                    required
+                  >
+                    <option value="Team Member">Team Member</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">{editingId ? 'New Password (Optional)' : 'Password'}</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    required={!editingId}
+                  />
                 </div>
                 <button type="submit" className="btn btn-primary">
-                  <i className="bi bi-save me-1"></i>{editingId ? 'Update Project' : 'Add Project'}
+                  <i className="bi bi-save me-1"></i>{editingId ? 'Update Member' : 'Add Member'}
                 </button>
                 {editingId && (
                   <button type="button" className="btn btn-outline-secondary ms-2" onClick={resetForm}>
@@ -201,43 +203,39 @@ function ProjectManagement({ user, setUser }) {
               </form>
             </div>
           </div>
-          <h3 className="mb-3">All Projects</h3>
-          {projects.length === 0 && !error && (
-            <div className="alert alert-info">No projects available.</div>
+          <h3 className="mb-3">All Team Members</h3>
+          {teamMembers.length === 0 && !error && (
+            <div className="alert alert-info">No team members available.</div>
           )}
-          {projects.length > 0 && (
+          {teamMembers.length > 0 && (
             <div className="card shadow-sm">
               <div className="card-body">
                 <div className="table-responsive">
                   <table className="table table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {projects.map((project) => (
-                        <tr key={project._id}>
-                          <td>{project.title}</td>
-                          <td>{project.description || 'N/A'}</td>
-                          <td>{project.startDate ? new Date(project.startDate).toLocaleDateString() : 'N/A'}</td>
-                          <td>{project.endDate ? new Date(project.endDate).toLocaleDateString() : 'N/A'}</td>
+                      {teamMembers.map((member) => (
+                        <tr key={member._id}>
+                          <td>{member.name}</td>
+                          <td>{member.email}</td>
+                          <td>{member.role}</td>
                           <td>
                             <button
-                              type="button"
                               className="btn btn-outline-warning me-2"
-                              onClick={() => handleEdit(project)}
+                              onClick={() => handleEdit(member)}
                             >EDIT
                               {/* <i className="bi bi-pencil"></i> */}
                             </button>
                             <button
-                              type="button"
                               className="btn btn-outline-danger"
-                              onClick={() => handleDelete(project._id)}
+                              onClick={() => handleDelete(member._id)}
                             >DELETE
                               {/* <i className="bi bi-trash"></i> */}
                             </button>
@@ -256,4 +254,4 @@ function ProjectManagement({ user, setUser }) {
   );
 }
 
-export default ProjectManagement;
+export default TeamManagement;

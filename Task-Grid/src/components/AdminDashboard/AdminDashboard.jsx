@@ -13,26 +13,24 @@ function AdminDashboard({ user, setUser }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setUser(null);
     navigate('/login');
+    setUser(null);
   };
 
   useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     axios.get('http://localhost:5000/api/projects')
       .then((response) => {
         const validProjects = response.data.filter(
           (project) => project && project._id && project.title
         );
-        if (validProjects.length !== response.data.length) {
-          console.warn(
-            `Filtered out ${response.data.length - validProjects.length} invalid projects`
-          );
-        }
         setProjects(validProjects);
         setError('');
       })
-      .catch((error) => {
-        console.error('Error fetching projects:', error);
+      .catch(() => {
         setError('Failed to load projects.');
       });
 
@@ -41,8 +39,7 @@ function AdminDashboard({ user, setUser }) {
         setTeamMembers(response.data);
         setError('');
       })
-      .catch((error) => {
-        console.error('Error fetching team members:', error);
+      .catch(() => {
         setError('Failed to load team members.');
       });
 
@@ -54,11 +51,12 @@ function AdminDashboard({ user, setUser }) {
         setTasks(response.data);
         setError('');
       })
-      .catch((error) => {
-        console.error('Error fetching tasks:', error);
+      .catch(() => {
         setError('Failed to load tasks.');
       });
-  }, [filterProject, filterMember]);
+  }, [user, filterProject, filterMember, navigate]);
+
+  if (!user) return null;
 
   const taskSummary = {
     total: tasks.length,
@@ -67,10 +65,10 @@ function AdminDashboard({ user, setUser }) {
   };
 
   return (
-    <div className="admin-dashboard-container">
-      <nav className="navbar navbar-expand-sm navbar-blue fixed-top">
+    <div className="min-vh-100 bg-light">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/dashboard">Task Grid</Link>
+          <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -80,84 +78,106 @@ function AdminDashboard({ user, setUser }) {
                 <Link className="nav-link" to="/tasks">Manage Tasks</Link>
               </li>
               {user.role === 'Admin' && (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/projects">Manage Projects</Link>
-                </li>
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/projects">Manage Projects</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/team">Manage Team</Link>
+                  </li>
+                </>
               )}
             </ul>
-            <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>Logout</button>
+            <button className="btn btn-outline-light" onClick={handleLogout}>
+              <i className="bi bi-box-arrow-right me-1"></i>Logout
+            </button>
           </div>
         </div>
       </nav>
-      <div className="admin-dashboard-content">
-        <h2>Welcome, {user.name} (Admin)</h2>
-        {error && <div className="alert alert-danger">{error}</div>}
-        <div className="card mb-3">
-          <div className="card-body">
-            <h5 className="card-title">Task Summary</h5>
-            <p>Total Tasks: {taskSummary.total}</p>
-            <p>Completed: {taskSummary.completed}</p>
-            <p>Tasks In Progress: {taskSummary.pending}</p>
+      <main className="pt-5 mt-5">
+        <div className="container-fluid py-4">
+          <h2 className="mb-4">Welcome, {user.name} (Admin)</h2>
+          {error && <div className="alert alert-danger">{error}</div>}
+          <div className="card mb-4 shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title">Task Summary</h5>
+              <div className="row">
+                <div className="col-md-4 mb-2">Total Tasks: {taskSummary.total}</div>
+                <div className="col-md-4 mb-2">Completed: {taskSummary.completed}</div>
+                <div className="col-md-4 mb-2">Tasks In Progress: {taskSummary.pending}</div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Filter by Project</label>
-          <select
-            className="form-select"
-            value={filterProject}
-            onChange={(e) => setFilterProject(e.target.value)}
-          >
-            <option value="">All Projects</option>
-            {projects.map((project) => (
-              <option key={project._id} value={project._id}>
-                {project.title || 'Untitled Project'}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Filter by Team Member</label>
-          <select
-            className="form-select"
-            value={filterMember}
-            onChange={(e) => setFilterMember(e.target.value)}
-          >
-            <option value="">All Members</option>
-            {teamMembers.map((member) => (
-              <option key={member._id} value={member.name}>
-                {member.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <h3>All Tasks</h3>
-        {tasks.length === 0 && !error ? (
-          <p>No tasks available.</p>
-        ) : (
-          <div className="table-responsive">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Project</th>
-                  <th>Assigned To</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tasks.map((task) => (
-                  <tr key={task._id}>
-                    <td>{task.title}</td>
-                    <td>{task.project?.title || 'N/A'}</td>
-                    <td>{task.assignedTo?.name || 'N/A'}</td>
-                    <td>{task.status}</td>
-                  </tr>
+          <div className="row">
+            <div className="col-md-6 mb-3">
+              <label className="form-label">Filter by Project</label>
+              <select
+                className="form-select"
+                value={filterProject}
+                onChange={(e) => setFilterProject(e.target.value)}
+              >
+                <option value="">All Projects</option>
+                {projects.map((project) => (
+                  <option key={project._id} value={project._id}>
+                    {project.title || 'Untitled Project'}
+                  </option>
                 ))}
-              </tbody>
-            </table>
+              </select>
+            </div>
+            <div className="col-md-6 mb-3">
+              <label className="form-label">Filter by Team Member</label>
+              <select
+                className="form-select"
+                value={filterMember}
+                onChange={(e) => setFilterMember(e.target.value)}
+              >
+                <option value="">All Members</option>
+                {teamMembers.map((member) => (
+                  <option key={member._id} value={member.name}>
+                    {member.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-        )}
-      </div>
+          <h3 className="mb-3">All Tasks</h3>
+          {tasks.length === 0 && !error && (
+            <div className="alert alert-info">No tasks available.</div>
+          )}
+          {tasks.length > 0 && (
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <div className="table-responsive">
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Project</th>
+                        <th scope="col">Assigned To</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tasks.map((task) => (
+                        <tr key={task._id}>
+                          <td>{task.title}</td>
+                          <td>{task.project?.title || 'N/A'}</td>
+                          <td>{task.assignedTo?.name || 'N/A'}</td>
+                          <td>
+                            <span className={`badge bg-${task.status === 'Done' ? 'success' : task.status === 'In Progress' ? 'warning' : 'secondary'}`}>
+                              {task.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }

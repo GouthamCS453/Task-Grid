@@ -1,89 +1,13 @@
-.admin-dashboard-container {
-  display: flex;
-  flex-direction: column;
+.min-vh-100 {
   min-height: 100vh;
 }
 
-.admin-dashboard-content {
-  padding: 80px 20px 20px 20px;
-  flex-grow: 1;
+.card-title{
+  text-align: center;
+
 }
 
-.alert {
-  margin-bottom: 15px;
-}
+.col-md-4 mb-2{
+  text-align: center;
 
-/* Navbar custom styles */
-.navbar-blue {
-  background-color: #0d6efd; /* Matches btn-primary */
-}
-
-.navbar-brand {
-  font-weight: bold;
-  color: #ffffff !important;
-}
-
-.nav-link {
-  margin-right: 10px;
-  color: #ffffff !important;
-}
-
-.nav-link:hover,
-.nav-link:focus {
-  color: #d0e3ff !important; /* Lighter blue for hover/focus */
-}
-
-.btn-outline-light {
-  margin-left: 10px;
-  color: #ffffff;
-  border-color: #ffffff;
-}
-
-.btn-outline-light:hover,
-.btn-outline-light:focus {
-  background-color: #d0e3ff;
-  color: #0d6efd;
-}
-
-
-@media (max-width: 768px) {
-  .admin-dashboard-content {
-    padding-top: 60px; 
-  }
-
-  h2, h3 {
-    font-size: 1.5rem; 
-  }
-
-  .card {
-    font-size: 0.9rem; 
-  }
-
-  .form-select, .form-label {
-    font-size: 0.9rem; 
-  }
-
-  .table-responsive {
-    font-size: 0.85rem; 
-  }
-}
-
-@media (max-width: 576px) {
-  .admin-dashboard-content {
-    padding: 60px 10px 10px 10px; 
-  }
-
-  .navbar-brand {
-    font-size: 1rem;
-  }
-
-  .nav-link {
-    margin-right: 5px;
-    font-size: 0.9rem;
-  }
-
-  .btn-outline-light {
-    margin-left: 5px;
-    font-size: 0.8rem;
-  }
 }

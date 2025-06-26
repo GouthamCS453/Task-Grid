@@ -5,6 +5,7 @@ import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import TeamDashboard from './components/TeamDashboard/TeamDashboard';
 import ProjectManagement from './components/ProjectManagement/ProjectManagement';
 import TaskManagement from './components/TaskManagement/TaskManagement';
+import TeamManagement from './components/TeamManagement/TeamManagement';
 import './App.css';
 
 function App() {
@@ -25,9 +26,11 @@ function App() {
               )
             }
           />
-          <Route path="/projects" element={<ProjectManagement user={user} />} />
-          <Route path="/tasks" element={<TaskManagement user={user} />} />
+          <Route path="/projects" element={<ProjectManagement user={user} setUser={setUser} />} />
+          <Route path="/tasks" element={<TaskManagement user={user}  setUser={setUser}/>} />
+          <Route path="/team" element={<TeamManagement user={user} setUser={setUser} />} />
         </Routes>
+      
       </div>
   );
 }

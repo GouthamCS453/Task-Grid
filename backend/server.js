@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const Project = require('./models/Project');
 const Task = require('./models/Task');
@@ -7,18 +6,17 @@ const TeamMember = require('./models/TeamMember');
 
 const app = express();
 
-// Middleware
+
 require('./connection')
 app.use(cors());
 app.use(express.json());
 
-// Error handling middleware
+
 const handleError = (res, status, message) => {
   return res.status(status).send({ message });
 };
 
 
-// --- Authentication Endpoint ---
 app.post('/api/login', async (req, res) => {
   try {
     const { name, role, password } = req.body;
@@ -31,7 +29,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// --- Project Endpoints ---
+// Project API
 app.get('/api/projects', async (req, res) => {
   try {
     const projects = await Project.find();
@@ -80,7 +78,7 @@ app.delete('/api/projects/:id', async (req, res) => {
   }
 });
 
-// --- Task Endpoints ---
+// Task api
 app.get('/api/tasks', async (req, res) => {
   try {
     const query = {};
@@ -137,7 +135,7 @@ app.delete('/api/tasks/:id', async (req, res) => {
   }
 });
 
-// --- Team Member Endpoints ---
+// Team Member API
 app.get('/api/teammembers', async (req, res) => {
   try {
     const teamMembers = await TeamMember.find();
