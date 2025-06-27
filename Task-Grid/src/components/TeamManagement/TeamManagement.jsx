@@ -51,7 +51,12 @@ function TeamManagement({ user, setUser }) {
     if (editingId) {
       axios.put(`http://localhost:5000/api/teammembers/${editingId}`, memberData)
         .then((response) => {
-          setTeamMembers(teamMembers.map((member) => (member._id === editingId ? response.data : member)));
+          setTeamMembers((prev) =>
+            prev.map((member) =>
+              member._id === editingId ? response.data : member
+            )
+          );
+
           resetForm();
           setSuccess('Team member updated successfully!');
         })
@@ -119,7 +124,7 @@ function TeamManagement({ user, setUser }) {
     <div className="team-management-container">
       <nav className="team-management-navbar">
         <div className="navbar-container">
-          <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
+          <Link className="navbar-brand fw-bold" to="/dashboard">📋Task Grid</Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -195,11 +200,11 @@ function TeamManagement({ user, setUser }) {
                     required={!editingId}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary team-management-button">
+                <button type="submit" className="team-management-button">
                   <i className="bi bi-save team-management-icon"></i>{editingId ? 'Update Member' : 'Add Member'}
                 </button>
                 {editingId && (
-                  <button type="button" className="btn btn-outline-secondary team-management-cancel" onClick={resetForm}>
+                  <button type="button" className="team-management-cancel" onClick={resetForm}>
                     <i className="bi bi-x-circle team-management-icon"></i>Cancel
                   </button>
                 )}

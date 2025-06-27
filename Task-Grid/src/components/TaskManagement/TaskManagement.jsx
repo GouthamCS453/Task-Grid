@@ -169,7 +169,7 @@ function TaskManagement({ user, setUser }) {
     <div className="task-management-container">
       <nav className="task-management-navbar">
         <div className="navbar-container">
-          <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
+          <Link className="navbar-brand fw-bold" to="/dashboard">📋Task Grid</Link>
           <button
             className="navbar-toggler"
             type="button"

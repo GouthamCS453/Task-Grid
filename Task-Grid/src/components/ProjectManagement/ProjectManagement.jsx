@@ -118,7 +118,7 @@ function ProjectManagement({ user, setUser }) {
     <div className="project-management-container">
       <nav className="project-management-navbar">
         <div className="navbar-container">
-          <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
+          <Link className="navbar-brand fw-bold" to="/dashboard">📋Task Grid</Link>
           <button
             className="navbar-toggler"
             type="button"

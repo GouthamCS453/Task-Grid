@@ -6,12 +6,12 @@
   --primary-orange: #FF9D23;
   --primary-red: #F93827;
   --text-dark: #333333;
-  --background-light: #F8F9FA;
-  --off-white: #F5F5F5; /* Darker shade for backgrounds */
-  --text-light: #E0E0E0; /* Darker shade for text */
+  --background-light:#ADE7DB;
+  --off-white: #E6F7F1; 
+  --text-light: #E0E0E0; 
 }
 
-/* Ensure body styles are applied with higher specificity */
+
 html, body, #root {
   font-family: 'Poppins', sans-serif !important;
   background-color: var(--background-light) !important;
@@ -22,7 +22,7 @@ html, body, #root {
   min-height: 100vh;
 }
 
-/* Container styles with rounded corners */
+
 .container-custom {
   border-radius: 12px;
   background-color: var(--off-white);
@@ -30,7 +30,7 @@ html, body, #root {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Button styles */
+
 .btn-custom {
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
@@ -60,7 +60,7 @@ html, body, #root {
   transform: translateY(-2px);
 }
 
-/* Table styles with color palette integration */
+
 .table-custom {
   width: 100%;
   border-collapse: separate;
@@ -91,7 +91,6 @@ html, body, #root {
   background-color: rgba(var(--primary-yellow), 0.2);
 }
 
-/* Card styles */
 .card-custom {
   border-radius: 12px;
   border: none;
@@ -110,7 +109,7 @@ html, body, #root {
   padding: 1.5rem;
 }
 
-/* Form styles */
+
 .form-custom {
   border-radius: 8px;
   padding: 1rem;
@@ -131,7 +130,7 @@ html, body, #root {
   box-shadow: 0 0 0 3px rgba(var(--primary-orange), 0.2);
 }
 
-/* Utility classes */
+
 .text-primary-green {
   color: var(--primary-green);
 }

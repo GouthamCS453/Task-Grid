@@ -65,8 +65,8 @@ function Login({ setUser }) {
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-primary login-button">
-                <i className="bi bi-box-arrow-in-right login-button-icon"></i>Login
+              <button type="submit" className="login-button">
+                <i className=" login-button-icon"></i>Login
               </button>
             </form>
           </div>

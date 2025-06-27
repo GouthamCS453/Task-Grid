@@ -91,7 +91,7 @@
 
 .team-management-content {
   background-color: var(--off-white);
-  border-radius: 12px;
+  border-radius: 50px;
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -159,7 +159,7 @@
 
 .team-management-cancel {
   border-color: var(--primary-yellow);
-  color: var(--primary-yellow);
+  color: black;
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
   margin-left: 1rem;
@@ -216,4 +216,51 @@
 .alert-info {
   background-color: var(--primary-yellow);
   color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-brand {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem;
+  }
+
+  .team-management-nav {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .team-management-nav-link,
+  .team-management-logout {
+    width: 100%;
+    text-align: center;
+  }
+
+  .team-management-main {
+    padding: 0 0.5rem;
+  }
+
+  .team-management-content {
+    border-radius: 20px;
+    padding: 1rem;
+  }
+
+  .team-management-card-body {
+    padding: 1rem;
+  }
+
+  .team-management-cancel {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+
+  .table th, .table td {
+    padding: 0.75rem;
+  }
 }

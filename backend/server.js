@@ -162,16 +162,18 @@ app.post('/api/teammembers', async (req, res) => {
 
 app.put('/api/teammembers/:id', async (req, res) => {
   try {
-    const teamMember = await TeamMember.findById(req.params.id);
-    if (!teamMember) return handleError(res, 404, 'Team member not found');
-    await TeamMember.findByIdAndUpdate(req.params.id, req.body);
-    teamMember.updatedAt = Date.now();
-    await teamMember.save();
-    res.send(teamMember);
+    const updatedMember = await TeamMember.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } 
+    );
+    if (!updatedMember) return handleError(res, 404, 'Team member not found');
+    res.send(updatedMember);
   } catch (err) {
     handleError(res, 400, err.message);
   }
 });
+
 
 app.delete('/api/teammembers/:id', async (req, res) => {
   try {

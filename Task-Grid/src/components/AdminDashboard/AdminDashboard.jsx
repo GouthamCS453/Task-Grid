@@ -13,8 +13,8 @@ function AdminDashboard({ user, setUser }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate('/login');
     setUser(null);
+    navigate('/login');
   };
 
   useEffect(() => {
@@ -22,15 +22,22 @@ function AdminDashboard({ user, setUser }) {
       navigate('/login');
       return;
     }
+
     axios.get('http://localhost:5000/api/projects')
       .then((response) => {
         const validProjects = response.data.filter(
           (project) => project && project._id && project.title
         );
+        if (validProjects.length !== response.data.length) {
+          console.warn(
+            `Filtered out ${response.data.length - validProjects.length} invalid projects`
+          );
+        }
         setProjects(validProjects);
         setError('');
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error fetching projects:', error);
         setError('Failed to load projects.');
       });
 
@@ -39,7 +46,8 @@ function AdminDashboard({ user, setUser }) {
         setTeamMembers(response.data);
         setError('');
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error fetching team members:', error);
         setError('Failed to load team members.');
       });
 
@@ -51,7 +59,8 @@ function AdminDashboard({ user, setUser }) {
         setTasks(response.data);
         setError('');
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error fetching tasks:', error);
         setError('Failed to load tasks.');
       });
   }, [user, filterProject, filterMember, navigate]);
@@ -64,65 +73,110 @@ function AdminDashboard({ user, setUser }) {
     pending: tasks.length - tasks.filter((task) => task.status === 'Done').length,
   };
 
+  const taskCountPerProject = {};
+  tasks.forEach((task) => {
+    const projectTitle = task.project?.title || 'Untitled Project';
+    if (taskCountPerProject[projectTitle]) {
+      taskCountPerProject[projectTitle]++;
+    } else {
+      taskCountPerProject[projectTitle] = 1;
+    }
+  });
+
   return (
     <div className="admin-dashboard-container">
       <nav className="admin-dashboard-navbar">
-  <div className="navbar-container">
-    <Link className="navbar-brand fw-bold" to="/dashboard">
-      Task Grid
-    </Link>
-    <button
-      className="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span className="navbar-toggler-icon"></span>
-    </button>
-    <div className="navbar-collapse" id="navbarNav">
-      <div className="admin-dashboard-nav">
-        <Link className="admin-dashboard-nav-link" to="/tasks">
-          Manage Tasks
-        </Link>
-        {user.role === 'Admin' && (
-          <>
-            <Link className="admin-dashboard-nav-link" to="/projects">
-              Manage Projects
-            </Link>
-            <Link className="admin-dashboard-nav-link" to="/team">
-              Manage Team
-            </Link>
-          </>
-        )}
-      </div>
-      <button
-        className="admin-dashboard-logout"
-        onClick={handleLogout}
-      >
-        <i className="bi bi-box-arrow-right admin-dashboard-icon"></i>
-        Logout
-      </button>
-    </div>
-  </div>
-</nav>
+        <div className="navbar-container">
+          <Link className="navbar-brand fw-bold" to="/dashboard">
+            📋Task Grid
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="navbar-collapse" id="navbarNav">
+            <div className="admin-dashboard-nav">
+              <Link className="admin-dashboard-nav-link" to="/tasks">
+                Manage Tasks
+              </Link>
+              {user.role === 'Admin' && (
+                <>
+                  <Link className="admin-dashboard-nav-link" to="/projects">
+                    Manage Projects
+                  </Link>
+                  <Link className="admin-dashboard-nav-link" to="/team">
+                    Manage Team
+                  </Link>
+                </>
+              )}
+            </div>
+            <button
+              className="admin-dashboard-logout"
+              onClick={handleLogout}
+            >
+              <i className="bi bi-box-arrow-right admin-dashboard-icon"></i>
+              Logout
+            </button>
+          </div>
+        </div>
+      </nav>
 
       <main className="admin-dashboard-main">
         <div className="admin-dashboard-content">
           <h2 className="admin-dashboard-title">Welcome, {user.name} (Admin)</h2>
           {error && <div className="alert alert-danger">{error}</div>}
+
           <div className="admin-dashboard-card">
             <div className="admin-dashboard-card-body">
-              <h5 className="admin-dashboard-card-title">Task Summary</h5>
-              <div className="admin-dashboard-row">
-                <div className="admin-dashboard-column">Total Tasks: {taskSummary.total}</div>
-                <div className="admin-dashboard-column">Completed: {taskSummary.completed}</div>
-                <div className="admin-dashboard-column">Tasks In Progress: {taskSummary.pending}</div>
+              <h5 className="admin-dashboard-card-title">Task Summary & Task Count Per Project</h5>
+              <div className="admin-dashboard-row dual-summary">
+                <div className="admin-dashboard-column summary-box">
+                  <div className="summary-item">
+                    <strong>Total Tasks:</strong><br /> {taskSummary.total}
+                  </div>
+                  <div className="summary-item">
+                    <strong>Completed:</strong><br /> {taskSummary.completed}
+                  </div>
+                  <div className="summary-item">
+                    <strong>Tasks In Progress:</strong><br /> {taskSummary.pending}
+                  </div>
+                </div>
+
+                <div className="admin-dashboard-column project-count">
+                  <table className="table table-bordered table-sm">
+                    <thead>
+                      <tr>
+                        <th>Project Title</th>
+                        <th>Task Count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.keys(taskCountPerProject).length === 0 ? (
+                        <tr>
+                          <td colSpan="2">No task data available.</td>
+                        </tr>
+                      ) : (
+                        Object.entries(taskCountPerProject).map(([title, count]) => (
+                          <tr key={title}>
+                            <td>{title}</td>
+                            <td>{count}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
+
           <div className="admin-dashboard-row">
             <div className="admin-dashboard-filter-column">
               <label className="form-label">Filter by Project</label>
@@ -155,6 +209,7 @@ function AdminDashboard({ user, setUser }) {
               </select>
             </div>
           </div>
+
           <h3 className="admin-dashboard-subtitle">All Tasks</h3>
           {tasks.length === 0 && !error && (
             <div className="alert alert-info">No tasks available.</div>
