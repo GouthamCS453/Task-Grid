@@ -65,51 +65,66 @@ function AdminDashboard({ user, setUser }) {
   };
 
   return (
-    <div className="min-vh-100 bg-light">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
-        <div className="container-fluid">
-          <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/tasks">Manage Tasks</Link>
-              </li>
-              {user.role === 'Admin' && (
-                <>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/projects">Manage Projects</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/team">Manage Team</Link>
-                  </li>
-                </>
-              )}
-            </ul>
-            <button className="btn btn-outline-light" onClick={handleLogout}>
-              <i className="bi bi-box-arrow-right me-1"></i>Logout
-            </button>
-          </div>
-        </div>
-      </nav>
-      <main className="pt-5 mt-5">
-        <div className="container-fluid py-4">
-          <h2 className="mb-4">Welcome, {user.name} (Admin)</h2>
+    <div className="admin-dashboard-container">
+      <nav className="admin-dashboard-navbar">
+  <div className="navbar-container">
+    <Link className="navbar-brand fw-bold" to="/dashboard">
+      Task Grid
+    </Link>
+    <button
+      className="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span className="navbar-toggler-icon"></span>
+    </button>
+    <div className="navbar-collapse" id="navbarNav">
+      <div className="admin-dashboard-nav">
+        <Link className="admin-dashboard-nav-link" to="/tasks">
+          Manage Tasks
+        </Link>
+        {user.role === 'Admin' && (
+          <>
+            <Link className="admin-dashboard-nav-link" to="/projects">
+              Manage Projects
+            </Link>
+            <Link className="admin-dashboard-nav-link" to="/team">
+              Manage Team
+            </Link>
+          </>
+        )}
+      </div>
+      <button
+        className="admin-dashboard-logout"
+        onClick={handleLogout}
+      >
+        <i className="bi bi-box-arrow-right admin-dashboard-icon"></i>
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
+
+      <main className="admin-dashboard-main">
+        <div className="admin-dashboard-content">
+          <h2 className="admin-dashboard-title">Welcome, {user.name} (Admin)</h2>
           {error && <div className="alert alert-danger">{error}</div>}
-          <div className="card mb-4 shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title">Task Summary</h5>
-              <div className="row">
-                <div className="col-md-4 mb-2">Total Tasks: {taskSummary.total}</div>
-                <div className="col-md-4 mb-2">Completed: {taskSummary.completed}</div>
-                <div className="col-md-4 mb-2">Tasks In Progress: {taskSummary.pending}</div>
+          <div className="admin-dashboard-card">
+            <div className="admin-dashboard-card-body">
+              <h5 className="admin-dashboard-card-title">Task Summary</h5>
+              <div className="admin-dashboard-row">
+                <div className="admin-dashboard-column">Total Tasks: {taskSummary.total}</div>
+                <div className="admin-dashboard-column">Completed: {taskSummary.completed}</div>
+                <div className="admin-dashboard-column">Tasks In Progress: {taskSummary.pending}</div>
               </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
+          <div className="admin-dashboard-row">
+            <div className="admin-dashboard-filter-column">
               <label className="form-label">Filter by Project</label>
               <select
                 className="form-select"
@@ -124,7 +139,7 @@ function AdminDashboard({ user, setUser }) {
                 ))}
               </select>
             </div>
-            <div className="col-md-6 mb-3">
+            <div className="admin-dashboard-filter-column">
               <label className="form-label">Filter by Team Member</label>
               <select
                 className="form-select"
@@ -140,14 +155,14 @@ function AdminDashboard({ user, setUser }) {
               </select>
             </div>
           </div>
-          <h3 className="mb-3">All Tasks</h3>
+          <h3 className="admin-dashboard-subtitle">All Tasks</h3>
           {tasks.length === 0 && !error && (
             <div className="alert alert-info">No tasks available.</div>
           )}
           {tasks.length > 0 && (
-            <div className="card shadow-sm">
-              <div className="card-body">
-                <div className="table-responsive">
+            <div className="admin-dashboard-card">
+              <div className="admin-dashboard-card-body">
+                <div className="admin-dashboard-table-responsive">
                   <table className="table table-hover">
                     <thead>
                       <tr>

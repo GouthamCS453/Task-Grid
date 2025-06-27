@@ -115,41 +115,44 @@ function ProjectManagement({ user, setUser }) {
   if (!user || user.role !== 'Admin') return null;
 
   return (
-    <div className="min-vh-100 bg-light">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
-        <div className="container-fluid">
+    <div className="project-management-container">
+      <nav className="project-management-navbar">
+        <div className="navbar-container">
           <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard">Dashboard</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/tasks">Manage Tasks</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link active" to="/projects">Manage Projects</Link>
-              </li>
-            </ul>
-            <button className="btn btn-outline-light" onClick={handleLogout}>
-              <i className="bi bi-box-arrow-right me-1"></i>Logout
+          <div className="navbar-collapse" id="navbarNav">
+            <div className="project-management-nav">
+              <Link className="project-management-nav-link" to="/dashboard">Dashboard</Link>
+              <Link className="project-management-nav-link" to="/tasks">Manage Tasks</Link>
+              <Link className="project-management-nav-link active" to="/projects">Manage Projects</Link>
+            </div>
+            <button className="project-management-logout" onClick={handleLogout}>
+              <i className="bi bi-box-arrow-right project-management-icon"></i>Logout
             </button>
           </div>
         </div>
       </nav>
-      <main className="pt-5 mt-5">
-        <div className="container-fluid py-4">
-          <h2 className="mb-4">Manage Projects</h2>
+
+      <main className="project-management-main">
+        <div className="project-management-content">
+          <h2 className="project-management-title">Manage Projects</h2>
           {error && <div className="alert alert-danger">{error}</div>}
           {success && <div className="alert alert-success">{success}</div>}
-          <div className="card mb-4 shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title">{editingId ? 'Edit Project' : 'Add Project'}</h5>
+          <div className="project-management-card">
+            <div className="project-management-card-body">
+              <h5 className="project-management-card-title">{editingId ? 'Edit Project' : 'Add Project'}</h5>
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
+                <div className="project-management-form-group">
                   <label className="form-label">Title</label>
                   <input
                     type="text"
@@ -159,7 +162,7 @@ function ProjectManagement({ user, setUser }) {
                     required
                   />
                 </div>
-                <div className="mb-3">
+                <div className="project-management-form-group">
                   <label className="form-label">Description</label>
                   <input
                     type="text"
@@ -168,8 +171,8 @@ function ProjectManagement({ user, setUser }) {
                     onChange={(e) => setForm({ ...form, description: e.target.value })}
                   />
                 </div>
-                <div className="row">
-                  <div className="col-md-6 mb-3">
+                <div className="project-management-row">
+                  <div className="project-management-column">
                     <label className="form-label">Start Date</label>
                     <input
                       type="date"
@@ -179,7 +182,7 @@ function ProjectManagement({ user, setUser }) {
                       required
                     />
                   </div>
-                  <div className="col-md-6 mb-3">
+                  <div className="project-management-column">
                     <label className="form-label">End Date</label>
                     <input
                       type="date"
@@ -190,25 +193,25 @@ function ProjectManagement({ user, setUser }) {
                     />
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary">
-                  <i className="bi bi-save me-1"></i>{editingId ? 'Update Project' : 'Add Project'}
+                <button type="submit" className="btn btn-primary project-management-button">
+                  <i className="bi bi-save project-management-icon"></i>{editingId ? 'Update Project' : 'Add Project'}
                 </button>
                 {editingId && (
-                  <button type="button" className="btn btn-outline-secondary ms-2" onClick={resetForm}>
-                    <i className="bi bi-x-circle me-1"></i>Cancel
+                  <button type="button" className="btn btn-outline-secondary project-management-cancel" onClick={resetForm}>
+                    <i className="bi bi-x-circle project-management-icon"></i>Cancel
                   </button>
                 )}
               </form>
             </div>
           </div>
-          <h3 className="mb-3">All Projects</h3>
+          <h3 className="project-management-subtitle">All Projects</h3>
           {projects.length === 0 && !error && (
             <div className="alert alert-info">No projects available.</div>
           )}
           {projects.length > 0 && (
-            <div className="card shadow-sm">
-              <div className="card-body">
-                <div className="table-responsive">
+            <div className="project-management-card">
+              <div className="project-management-card-body">
+                <div className="project-management-table-responsive">
                   <table className="table table-hover">
                     <thead>
                       <tr>
@@ -229,17 +232,15 @@ function ProjectManagement({ user, setUser }) {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-outline-warning me-2"
+                              className="btn btn-outline-warning project-management-action"
                               onClick={() => handleEdit(project)}
                             >EDIT
-                              {/* <i className="bi bi-pencil"></i> */}
                             </button>
                             <button
                               type="button"
-                              className="btn btn-outline-danger"
+                              className="btn btn-outline-danger project-management-action"
                               onClick={() => handleDelete(project._id)}
                             >DELETE
-                              {/* <i className="bi bi-trash"></i> */}
                             </button>
                           </td>
                         </tr>

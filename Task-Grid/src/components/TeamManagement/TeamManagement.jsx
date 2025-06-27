@@ -116,41 +116,44 @@ function TeamManagement({ user, setUser }) {
   if (!user || user.role !== 'Admin') return null;
 
   return (
-    <div className="min-vh-100 bg-light">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
-        <div className="container-fluid">
+    <div className="team-management-container">
+      <nav className="team-management-navbar">
+        <div className="navbar-container">
           <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard">Dashboard</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/projects">Manage Projects</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link active" to="/team">Manage Team</Link>
-              </li>
-            </ul>
-            <button className="btn btn-outline-light" onClick={handleLogout}>
-              <i className="bi bi-box-arrow-right me-1"></i>Logout
+          <div className="navbar-collapse" id="navbarNav">
+            <div className="team-management-nav">
+              <Link className="team-management-nav-link" to="/dashboard">Dashboard</Link>
+              <Link className="team-management-nav-link" to="/projects">Manage Projects</Link>
+              <Link className="team-management-nav-link active" to="/team">Manage Team</Link>
+            </div>
+            <button className="team-management-logout" onClick={handleLogout}>
+              <i className="bi bi-box-arrow-right team-management-icon"></i>Logout
             </button>
           </div>
         </div>
       </nav>
-      <main className="pt-5 mt-5">
-        <div className="container-fluid py-4">
-          <h2 className="mb-3">Manage Team Members</h2>
+
+      <main className="team-management-main">
+        <div className="team-management-content">
+          <h2 className="team-management-title">Manage Team Members</h2>
           {error && <div className="alert alert-danger">{error}</div>}
           {success && <div className="alert alert-success">{success}</div>}
-          <div className="card mb-4 shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title">{editingId ? 'Edit Team Member' : 'Add Team Member'}</h5>
+          <div className="team-management-card">
+            <div className="team-management-card-body">
+              <h5 className="team-management-card-title">{editingId ? 'Edit Team Member' : 'Add Team Member'}</h5>
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
+                <div className="team-management-form-group">
                   <label className="form-label">Name</label>
                   <input
                     type="text"
@@ -160,7 +163,7 @@ function TeamManagement({ user, setUser }) {
                     required
                   />
                 </div>
-                <div className="mb-3">
+                <div className="team-management-form-group">
                   <label className="form-label">Email</label>
                   <input
                     type="email"
@@ -170,7 +173,7 @@ function TeamManagement({ user, setUser }) {
                     required
                   />
                 </div>
-                <div className="mb-3">
+                <div className="team-management-form-group">
                   <label className="form-label">Role</label>
                   <select
                     className="form-select"
@@ -182,7 +185,7 @@ function TeamManagement({ user, setUser }) {
                     <option value="Admin">Admin</option>
                   </select>
                 </div>
-                <div className="mb-3">
+                <div className="team-management-form-group">
                   <label className="form-label">{editingId ? 'New Password (Optional)' : 'Password'}</label>
                   <input
                     type="password"
@@ -192,25 +195,25 @@ function TeamManagement({ user, setUser }) {
                     required={!editingId}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary">
-                  <i className="bi bi-save me-1"></i>{editingId ? 'Update Member' : 'Add Member'}
+                <button type="submit" className="btn btn-primary team-management-button">
+                  <i className="bi bi-save team-management-icon"></i>{editingId ? 'Update Member' : 'Add Member'}
                 </button>
                 {editingId && (
-                  <button type="button" className="btn btn-outline-secondary ms-2" onClick={resetForm}>
-                    <i className="bi bi-x-circle me-1"></i>Cancel
+                  <button type="button" className="btn btn-outline-secondary team-management-cancel" onClick={resetForm}>
+                    <i className="bi bi-x-circle team-management-icon"></i>Cancel
                   </button>
                 )}
               </form>
             </div>
           </div>
-          <h3 className="mb-3">All Team Members</h3>
+          <h3 className="team-management-subtitle">All Team Members</h3>
           {teamMembers.length === 0 && !error && (
             <div className="alert alert-info">No team members available.</div>
           )}
           {teamMembers.length > 0 && (
-            <div className="card shadow-sm">
-              <div className="card-body">
-                <div className="table-responsive">
+            <div className="team-management-card">
+              <div className="team-management-card-body">
+                <div className="team-management-table-responsive">
                   <table className="table table-hover">
                     <thead>
                       <tr>
@@ -228,16 +231,14 @@ function TeamManagement({ user, setUser }) {
                           <td>{member.role}</td>
                           <td>
                             <button
-                              className="btn btn-outline-warning me-2"
+                              className="btn btn-outline-warning team-management-action"
                               onClick={() => handleEdit(member)}
                             >EDIT
-                              {/* <i className="bi bi-pencil"></i> */}
                             </button>
                             <button
-                              className="btn btn-outline-danger"
+                              className="btn btn-outline-danger team-management-action"
                               onClick={() => handleDelete(member._id)}
                             >DELETE
-                              {/* <i className="bi bi-trash"></i> */}
                             </button>
                           </td>
                         </tr>

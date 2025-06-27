@@ -166,46 +166,49 @@ function TaskManagement({ user, setUser }) {
   if (!user) return null;
 
   return (
-    <div className="min-vh-100 bg-light">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
-        <div className="container-fluid">
+    <div className="task-management-container">
+      <nav className="task-management-navbar">
+        <div className="navbar-container">
           <Link className="navbar-brand fw-bold" to="/dashboard">Task Grid</Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard">Dashboard</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link active" to="/tasks">Manage Tasks</Link>
-              </li>
+          <div className="navbar-collapse" id="navbarNav">
+            <div className="task-management-nav">
+              <Link className="task-management-nav-link" to="/dashboard">Dashboard</Link>
+              <Link className="task-management-nav-link active" to="/tasks">Manage Tasks</Link>
               {user.role === 'Admin' && (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/projects">Manage Projects</Link>
-                </li>
+                <Link className="task-management-nav-link" to="/projects">Manage Projects</Link>
               )}
-            </ul>
-            <button className="btn btn-outline-light" onClick={handleLogout}>
-              <i className="bi bi-box-arrow-right me-1"></i>Logout
+            </div>
+            <button className="task-management-logout" onClick={handleLogout}>
+              <i className="bi bi-box-arrow-right task-management-icon"></i>Logout
             </button>
           </div>
         </div>
       </nav>
-      <main className="pt-5 mt-5">
-        <div className="container-fluid py-4">
-          <h2 className="mb-4">Manage Tasks</h2>
+
+      <main className="task-management-main">
+        <div className="task-management-content">
+          <h2 className="task-management-title">Manage Tasks</h2>
           {error && <div className="alert alert-danger">{error}</div>}
           {success && <div className="alert alert-success">{success}</div>}
           {(user.role === 'Admin' || (user.role === 'Team Member' && editingId)) && (
-            <div className="card mb-4 shadow-sm">
-              <div className="card-body">
-                <h5 className="card-title">{editingId ? 'Edit Task' : 'Add Task'}</h5>
+            <div className="task-management-card">
+              <div className="task-management-card-body">
+                <h5 className="task-management-card-title">{editingId ? 'Edit Task' : 'Add Task'}</h5>
                 <form onSubmit={handleSubmit}>
                   {user.role === 'Admin' && (
                     <>
-                      <div className="mb-3">
+                      <div className="task-management-form-group">
                         <label className="form-label">Title</label>
                         <input
                           type="text"
@@ -215,7 +218,7 @@ function TaskManagement({ user, setUser }) {
                           required
                         />
                       </div>
-                      <div className="mb-3">
+                      <div className="task-management-form-group">
                         <label className="form-label">Description</label>
                         <input
                           type="text"
@@ -224,7 +227,7 @@ function TaskManagement({ user, setUser }) {
                           onChange={(e) => setForm({ ...form, description: e.target.value })}
                         />
                       </div>
-                      <div className="mb-3">
+                      <div className="task-management-form-group">
                         <label className="form-label">Due Date</label>
                         <input
                           type="date"
@@ -234,7 +237,7 @@ function TaskManagement({ user, setUser }) {
                           required
                         />
                       </div>
-                      <div className="mb-3">
+                      <div className="task-management-form-group">
                         <label className="form-label">Assigned To</label>
                         <select
                           className="form-select"
@@ -250,7 +253,7 @@ function TaskManagement({ user, setUser }) {
                           ))}
                         </select>
                       </div>
-                      <div className="mb-3">
+                      <div className="task-management-form-group">
                         <label className="form-label">Project</label>
                         <select
                           className="form-select"
@@ -266,7 +269,7 @@ function TaskManagement({ user, setUser }) {
                           ))}
                         </select>
                       </div>
-                      <div className="mb-3">
+                      <div className="task-management-form-group">
                         <label className="form-label">Status</label>
                         <select
                           className="form-select"
@@ -279,7 +282,7 @@ function TaskManagement({ user, setUser }) {
                           <option value="Done">Done</option>
                         </select>
                       </div>
-                      <div className="mb-3">
+                      <div className="task-management-form-group">
                         <label className="form-label">Comments</label>
                         <input
                           type="text"
@@ -291,7 +294,7 @@ function TaskManagement({ user, setUser }) {
                     </>
                   )}
                   {user.role === 'Team Member' && (
-                    <div className="mb-3">
+                    <div className="task-management-form-group">
                       <label className="form-label">Update Status</label>
                       <select
                         className="form-select"
@@ -305,26 +308,26 @@ function TaskManagement({ user, setUser }) {
                       </select>
                     </div>
                   )}
-                  <button type="submit" className="btn btn-primary">
-                    <i className="bi bi-save me-1"></i>{editingId ? 'Update Task' : 'Add Task'}
+                  <button type="submit" className="btn btn-primary task-management-button">
+                    <i className="bi bi-save task-management-icon"></i>{editingId ? 'Update Task' : 'Add Task'}
                   </button>
                   {editingId && (
-                    <button type="button" className="btn btn-outline-secondary ms-2" onClick={resetForm}>
-                      <i className="bi bi-x-circle me-1"></i>Cancel
+                    <button type="button" className="btn btn-outline-secondary task-management-cancel" onClick={resetForm}>
+                      <i className="bi bi-x-circle task-management-icon"></i>Cancel
                     </button>
                   )}
                 </form>
               </div>
             </div>
           )}
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h3 className="card-title mb-3">{user.role === 'Admin' ? 'All Tasks' : 'Your Tasks'}</h3>
+          <div className="task-management-card">
+            <div className="task-management-card-body">
+              <h3 className="task-management-card-title">{user.role === 'Admin' ? 'All Tasks' : 'Your Tasks'}</h3>
               {tasks.length === 0 && !error && (
                 <div className="alert alert-info">No tasks available.</div>
               )}
               {tasks.length > 0 && (
-                <div className="table-responsive">
+                <div className="task-management-table-responsive">
                   <table className="table table-hover">
                     <thead>
                       <tr>
@@ -350,17 +353,15 @@ function TaskManagement({ user, setUser }) {
                           <td>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'N/A'}</td>
                           <td>
                             <button
-                              className="btn btn-outline-warning me-2"
+                              className="btn btn-outline-warning task-management-action"
                               onClick={() => handleEdit(task)}
                             >EDIT
-                              {/* <i className="bi bi-pencil"></i> */}
                             </button>
                             {user.role === 'Admin' && (
                               <button
-                                className="btn btn-outline-danger"
+                                className="btn btn-outline-danger task-management-action"
                                 onClick={() => handleDelete(task._id)}
                               >DELETE
-                                {/* <i className="bi bi-trash"></i> */}
                               </button>
                             )}
                           </td>

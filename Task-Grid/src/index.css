@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-green: #16C47F;
+  --primary-yellow: #FFD65A;
+  --primary-orange: #FF9D23;
+  --primary-red: #F93827;
+  --text-dark: #333333;
+  --background-light: #F8F9FA;
+  --off-white: #F5F5F5; /* Darker shade for backgrounds */
+  --text-light: #E0E0E0; /* Darker shade for text */
+}
+
+/* Ensure body styles are applied with higher specificity */
+html, body, #root {
+  font-family: 'Poppins', sans-serif !important;
+  background-color: var(--background-light) !important;
+  color: var(--text-dark) !important;
+  line-height: 1.6 !important;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Container styles with rounded corners */
+.container-custom {
+  border-radius: 12px;
+  background-color: var(--off-white);
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styles */
+.btn-custom {
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-custom-primary {
+  background-color: var(--primary-green);
+  color: var(--text-light);
+  border: none;
+}
+
+.btn-custom-primary:hover {
+  background-color: darken(var(--primary-green), 10%);
+  transform: translateY(-2px);
+}
+
+.btn-custom-secondary {
+  background-color: var(--primary-orange);
+  color: var(--text-light);
+  border: none;
+}
+
+.btn-custom-secondary:hover {
+  background-color: darken(var(--primary-orange), 10%);
+  transform: translateY(-2px);
+}
+
+/* Table styles with color palette integration */
+.table-custom {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--off-white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-custom thead {
+  background-color: var(--primary-green);
+  color: var(--text-light);
+}
+
+.table-custom th,
+.table-custom td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.table-custom tr:nth-child(even) {
+  background-color: var(--background-light);
+}
+
+.table-custom tr:hover {
+  background-color: rgba(var(--primary-yellow), 0.2);
+}
+
+/* Card styles */
+.card-custom {
+  border-radius: 12px;
+  border: none;
+  background-color: var(--off-white);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-custom-header {
+  background-color: var(--primary-yellow);
+  color: var(--text-dark);
+  border-radius: 12px 12px 0 0;
+  padding: 1rem;
+}
+
+.card-custom-body {
+  padding: 1.5rem;
+}
+
+/* Form styles */
+.form-custom {
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.form-custom input,
+.form-custom select {
+  border: 1px solid var(--primary-green);
+  border-radius: 6px;
+  padding: 0.5rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-custom input:focus,
+.form-custom select:focus {
+  border-color: var(--primary-orange);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--primary-orange), 0.2);
+}
+
+/* Utility classes */
+.text-primary-green {
+  color: var(--primary-green);
+}
+
+.text-primary-yellow {
+  color: var(--primary-yellow);
+}
+
+.text-primary-orange {
+  color: var(--primary-orange);
+}
+
+.text-primary-red {
+  color: var(--primary-red);
+}
+
+.bg-primary-green {
+  background-color: var(--primary-green);
+}
+
+.bg1-primary-yellow {
+  background-color: var(--primary-yellow);
+}
+
+.bg-primary-orange {
+  background-color: var(--primary-orange);
+}
+
+.bg-primary-red {
+  background-color: var(--primary-red);
+}

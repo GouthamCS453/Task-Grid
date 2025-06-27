@@ -27,14 +27,14 @@ function Login({ setUser }) {
   };
 
   return (
-    <div className="min-vh-100 bg-light d-flex align-items-center justify-content-center">
-      <div className="col-md-4">
-        <div className="card shadow-lg">
-          <div className="card-body p-5">
-            <h2 className="mb-4 text-center">Welcome Back</h2>
+    <div className="login-container">
+      <div className="login-form-wrapper">
+        <div className="login-card">
+          <div className="login-card-body">
+            <h2 className="login-title">Welcome Back</h2>
             {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleLogin}>
-              <div className="mb-3">
+              <div className="login-form-group">
                 <label className="form-label">Role</label>
                 <select
                   className="form-select"
@@ -45,7 +45,7 @@ function Login({ setUser }) {
                   <option value="Admin">Admin</option>
                 </select>
               </div>
-              <div className="mb-3">
+              <div className="login-form-group">
                 <label className="form-label">Name</label>
                 <input
                   type="text"
@@ -55,7 +55,7 @@ function Login({ setUser }) {
                   required
                 />
               </div>
-              <div className="mb-3">
+              <div className="login-form-group">
                 <label className="form-label">Password</label>
                 <input
                   type="password"
@@ -65,8 +65,8 @@ function Login({ setUser }) {
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-primary w-100">
-                <i className="bi bi-box-arrow-in-right me-1"></i>Login
+              <button type="submit" className="btn btn-primary login-button">
+                <i className="bi bi-box-arrow-in-right login-button-icon"></i>Login
               </button>
             </form>
           </div>
