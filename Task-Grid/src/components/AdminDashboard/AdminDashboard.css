@@ -188,7 +188,7 @@
   color: var(--text-dark);
 }
 
-/* Align Task Summary & Count Per Project side by side */
+
 .admin-dashboard-row.dual-summary {
   display: flex;
   flex-wrap: wrap;
