@@ -193,12 +193,12 @@ function ProjectManagement({ user, setUser }) {
                     />
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary project-management-button">
-                  <i className="bi bi-save project-management-icon"></i>{editingId ? 'Update Project' : 'Add Project'}
+                <button type="submit" className="project-management-button">
+                  <i className="project-management-icon"></i>{editingId ? 'Update Project' : 'Add Project'}
                 </button>
                 {editingId && (
                   <button type="button" className="btn btn-outline-secondary project-management-cancel" onClick={resetForm}>
-                    <i className="bi bi-x-circle project-management-icon"></i>Cancel
+                    <i className="project-management-icon"></i>Cancel
                   </button>
                 )}
               </form>
