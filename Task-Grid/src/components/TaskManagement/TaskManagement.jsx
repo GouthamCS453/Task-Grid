@@ -195,7 +195,7 @@ function TaskManagement({ user, setUser }) {
           </div>
         </div>
       </nav>
-
+      {/* TASK MAANAGEMENT */}
       <main className="task-management-main">
         <div className="task-management-content">
           <h2 className="task-management-title">Manage Tasks</h2>
@@ -308,12 +308,12 @@ function TaskManagement({ user, setUser }) {
                       </select>
                     </div>
                   )}
-                  <button type="submit" className="btn btn-primary task-management-button">
-                    <i className="bi bi-save task-management-icon"></i>{editingId ? 'Update Task' : 'Add Task'}
+                  <button type="submit" className="task-management-button">
+                    <i className="task-management-icon"></i>{editingId ? 'Update Task' : 'Add Task'}
                   </button>
                   {editingId && (
                     <button type="button" className="btn btn-outline-secondary task-management-cancel" onClick={resetForm}>
-                      <i className="bi bi-x-circle task-management-icon"></i>Cancel
+                      <i className=" task-management-icon"></i>Cancel
                     </button>
                   )}
                 </form>

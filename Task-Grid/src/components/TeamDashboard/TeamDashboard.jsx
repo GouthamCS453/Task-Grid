@@ -112,8 +112,7 @@ function TeamDashboard({ user, setUser }) {
             <div className="team-dashboard-card-body">
               <h5 className="team-dashboard-card-title">Your Task Summary</h5>
               <div className="team-dashboard-row">
-                <div className="team-dashboard-column">Total Tasks: {taskSummary.total}</div>
-                <div className="team-dashboard-column">Completed: {taskSummary.completed}</div>
+                <div className="team-dashboard-column"> {taskSummary.completed} of {taskSummary.total} tasks completed </div>
               </div>
 
               {/* Donut Chart */}

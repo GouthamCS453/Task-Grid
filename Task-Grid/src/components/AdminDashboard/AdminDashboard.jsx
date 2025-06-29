@@ -10,6 +10,8 @@ function AdminDashboard({ user, setUser }) {
   const [filterProject, setFilterProject] = useState('');
   const [filterMember, setFilterMember] = useState('');
   const [error, setError] = useState('');
+  const [navOpen, setNavOpen] = useState(false); // ✅ NEW STATE FOR TOGGLER
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -28,11 +30,6 @@ function AdminDashboard({ user, setUser }) {
         const validProjects = response.data.filter(
           (project) => project && project._id && project.title
         );
-        if (validProjects.length !== response.data.length) {
-          console.warn(
-            `Filtered out ${response.data.length - validProjects.length} invalid projects`
-          );
-        }
         setProjects(validProjects);
         setError('');
       })
@@ -93,15 +90,12 @@ function AdminDashboard({ user, setUser }) {
           <button
             className="navbar-toggler"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
             aria-label="Toggle navigation"
+            onClick={() => setNavOpen(!navOpen)} // ✅ TOGGLE STATE
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="navbar-collapse" id="navbarNav">
+          <div className={`navbar-collapse ${navOpen ? 'show' : ''}`} id="navbarNav">
             <div className="admin-dashboard-nav">
               <Link className="admin-dashboard-nav-link" to="/tasks">
                 Manage Tasks

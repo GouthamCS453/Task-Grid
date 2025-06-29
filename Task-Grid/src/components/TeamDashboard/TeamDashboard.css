@@ -125,9 +125,11 @@
   min-width: 200px;
   background-color: var(--background-light);
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 45px;
   text-align: center;
   color: var(--text-dark);
+  font-weight: 600;
+  font-size: large;
 }
 
 .team-dashboard-subtitle {
