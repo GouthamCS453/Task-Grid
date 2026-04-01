@@ -1,7 +1,8 @@
 # Task Grid
 
 Task Grid is a modern web-based task management application built using React and Vite. It is designed to help users efficiently organize, track, and analyze their tasks through an intuitive and responsive interface. The application focuses on simplicity, performance, and visual clarity, making it suitable for both personal productivity and basic administrative monitoring.
-This Project is built upon the MERN Stack ans it is a simple task organisation platform.
+
+This Project is built upon the MERN Stack and it is a simple task organisation platform.
 ---
 
 ## Features
