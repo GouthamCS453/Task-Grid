@@ -50,28 +50,6 @@ This Project is built upon the MERN Stack and it is a simple task organisation p
 - Recharts
 
 ---
-
-## Project Structure
-
-Task-Grid/
-│
-├── public/                 # Static assets
-├── src/
-│   ├── assets/             # Images and media files
-│   ├── components/         # Reusable UI components
-│   │   ├── AdminDashboard/
-│   │   ├── HomePage/
-│   │   └── ...
-│   ├── App.jsx             # Root component
-│   ├── main.jsx            # Application entry point
-│   └── styles/             # CSS and styling files
-│
-├── index.html              # Main HTML file
-├── package.json            # Project dependencies
-├── vite.config.js          # Vite configuration
-└── README.md               # Project documentation
-
----
 ## Installation and Setup
 
 ### 1. Clone the Repository
